@@ -1,4 +1,4 @@
-###### DiskPerf
+# DiskPerf
 
 A simple tool to test a disk's performance or compare the performances of different filesystems
 
