@@ -40,7 +40,7 @@ function getfilename()
 function delfile()
 {
 	if [ -d "$1" ]; then
-		cd $1
+		cd "$1"
 		delfile $(getfilename . $(randomfile))
 		cd ..
 	elif [ -f "$1" ]; then
