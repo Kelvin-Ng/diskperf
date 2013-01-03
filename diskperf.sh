@@ -18,7 +18,11 @@ EOF
 
 function getime()
 {
-	echo `/usr/bin/time -p $@ 2>&1 > /dev/null | grep 'real' | cut -d ' ' -f 2`
+	#echo $(/usr/bin/time -p $@ 2>&1 > /dev/null | grep 'real' | cut -d ' ' -f 2)
+	start=$(date +%s)
+	`$@`
+	end=$(date +%s)
+	echo $(($end - $start))
 }
 
 function getnum()
@@ -29,7 +33,8 @@ function getnum()
 function randomfile()
 {
 	num=$(getnum)
-	echo $(($(od -An -N2 -i /dev/random) % $num + 1))
+	#echo $(($(od -An -N2 -i /dev/random) % $num + 1))
+	echo $(($RANDOM % $num + 1))
 }
 
 function getfilename()
@@ -39,13 +44,24 @@ function getfilename()
 
 function delfile()
 {
-	if [ -d "$1" ]; then
+	if [ -d "$1" ] && [ $(getnum "$1") > 0 ]; then
 		cd "$1"
 		delfile $(getfilename . $(randomfile))
 		cd ..
 	elif [ -f "$1" ]; then
-		rm $1
+		rm "$1"
+		dnum=$(($dnum - 1))
+	else
+		rm -r "$1"
 	fi
+}
+
+function randomdelnfile()
+{
+	for i in $(seq 1 "$1")
+	do
+		delfile $(getfilename . $(randomfile))
+	done
 }
 
 while getopts "hs:d:" opt 
@@ -72,11 +88,16 @@ if [ "$src" == "" ] || [ "$dst" == "" ]; then
 	exit 1
 fi
 
-echo Start copying the files...
+echo "Start copying the files..."
 xt=$(getime cp -r "$src/*" "$dst")
 echo "Time needed: $xt"
 
 cd $dst
 
-delfile $(getfilename . $(randomfile))
+echo "Getting number of files being deleted..."
+dnum=$(($(find . -type f | wc -l) / 10 * 7))
+echo $dnum
+echo "Testing random delete..."
+dt=$(getime randomdelnfile "$dnum")
+echo "Time needed: $dt"
 
