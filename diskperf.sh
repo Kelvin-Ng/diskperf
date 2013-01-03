@@ -90,7 +90,7 @@ fi
 
 echo "Start copying the files..."
 xt=$(getime cp -r "$src/*" "$dst")
-echo "Time needed: $xt"
+echo "Time needed: ${xt}s"
 
 cd $dst
 
@@ -99,5 +99,5 @@ dnum=$(($(find . -type f | wc -l) / 10 * 7))
 echo $dnum
 echo "Testing random delete..."
 dt=$(getime randomdelnfile "$dnum")
-echo "Time needed: $dt"
+echo "Time needed: ${dt}s"
 
