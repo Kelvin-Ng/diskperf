@@ -42,7 +42,7 @@ function getfilename()
 
 function delfile()
 {
-	if [ -d "$1" ] && [ $(getnum "$1") > 0 ]; then
+	if [ -d "$1" ] && [ $(getnum "$1") -gt 0 ]; then
 		cd "$1"
 		delfile $(getfilename . $(randomfile))
 		cd ..
