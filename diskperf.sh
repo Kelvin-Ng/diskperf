@@ -87,15 +87,20 @@ if [ "$src" == "" ] || [ "$dst" == "" ]; then
 fi
 
 echo "Start copying the files..."
-xt=$(getime cp -r "$src/*" "$dst")
-echo "Time needed: ${xt}s"
+copy_file_t=$(getime cp -r "$src/*" "$dst")
+echo "Time needed: ${copy_file_t}s"
 
 cd $dst
 
 echo "Getting number of files being deleted..."
+start=$(date +%s)
 dnum=$(($(find . -type f | wc -l) / 10 * 7))
-echo $dnum
+end=$(date +%s)
+get_num_del_t=$(($end - $start))
+echo "Number of files being deleted: $dnum"
+echo "Time needed: $get_num_del_t"
+
 echo "Testing random delete..."
-dt=$(getime randomdelnfile "$dnum")
-echo "Time needed: ${dt}s"
+random_del_t=$(getime randomdelnfile "$dnum")
+echo "Time needed: ${random_del_t}s"
 
