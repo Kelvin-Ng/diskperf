@@ -4,7 +4,7 @@
 #
 # Author: Kelvin Ng
 # Establish Date: 3/1/2013
-# Last Update: 3/1/2013
+# Last Update: 4/1/2013
 #
 ################################################
 
@@ -18,7 +18,6 @@ EOF
 
 function getime()
 {
-	#echo $(/usr/bin/time -p $@ 2>&1 > /dev/null | grep 'real' | cut -d ' ' -f 2)
 	start=$(date +%s)
 	`$@`
 	end=$(date +%s)
@@ -33,7 +32,6 @@ function getnum()
 function randomfile()
 {
 	num=$(getnum)
-	#echo $(($(od -An -N2 -i /dev/random) % $num + 1))
 	echo $(($RANDOM % $num + 1))
 }
 
